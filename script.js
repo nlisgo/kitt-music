@@ -98,13 +98,41 @@ function createMobileMenu() {
                 background: none;
                 border: none;
                 font-size: 1.5rem;
-                color: #333;
+                color: var(--text-primary);
                 cursor: pointer;
                 display: block;
+                transition: color 0.3s ease;
             `;
             
-            menuToggle.addEventListener('click', function() {
+            function toggleMenu() {
                 navMenu.classList.toggle('mobile-active');
+                const icon = menuToggle.querySelector('i');
+                if (navMenu.classList.contains('mobile-active')) {
+                    icon.className = 'fas fa-times';
+                } else {
+                    icon.className = 'fas fa-bars';
+                }
+            }
+            
+            menuToggle.addEventListener('click', toggleMenu);
+            
+            // Close menu when clicking on nav links
+            const navLinks = navMenu.querySelectorAll('a');
+            navLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    if (navMenu.classList.contains('mobile-active')) {
+                        navMenu.classList.remove('mobile-active');
+                        menuToggle.querySelector('i').className = 'fas fa-bars';
+                    }
+                });
+            });
+            
+            // Close menu when clicking outside
+            document.addEventListener('click', function(event) {
+                if (!navbar.contains(event.target) && navMenu.classList.contains('mobile-active')) {
+                    navMenu.classList.remove('mobile-active');
+                    menuToggle.querySelector('i').className = 'fas fa-bars';
+                }
             });
             
             navbar.appendChild(menuToggle);
@@ -117,12 +145,14 @@ function createMobileMenu() {
                 right: 0;
                 background: white;
                 flex-direction: column;
-                padding: 20px;
-                box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+                padding: 25px 20px;
+                box-shadow: 0 4px 15px var(--shadow-medium);
                 transform: translateY(-100%);
                 opacity: 0;
                 pointer-events: none;
                 transition: all 0.3s ease;
+                border-top: 1px solid var(--border-light);
+                z-index: 999;
             `;
         }
     }
